@@ -93,7 +93,14 @@ namespace UOFLauncher.Models
 
         public static async void InitializeUpdates()
         {
-            var url = Ultima.IsUOP() ? Constants.UOPDownload : Constants.MULDownload;
+            string url = String.Empty;
+
+            if (Config.GetSetting("EnableTreeHack") == "False" || string.IsNullOrEmpty(Config.GetSetting("EnableTreeHack")))
+                url = Ultima.IsUOP() ? Constants.UOPDownload : Constants.MULDownload;
+            else
+            {
+                url = Ultima.IsUOP() ? Constants.UOPTreeHackDownload : Constants.MULTreeHackDownload;
+            }
 
             var doc = await GetUpdates(url);
 

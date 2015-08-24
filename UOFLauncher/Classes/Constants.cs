@@ -37,5 +37,8 @@ namespace UOFLauncher.Classes
         public static readonly string UODownload = "http://www.uoforever.com/patches/UO/Update.xml";
         public static readonly string UOPDownload = "http://www.uoforever.com/patches/UOP/Updates.xml";
         public static readonly string MULDownload = "http://www.uoforever.com/patches/MUL/Updates.xml";
+
+        public static readonly string MULTreeHackDownload = "http://www.uoforever.com/patches/MULTREEHACK/Updates.xml";
+        public static readonly string UOPTreeHackDownload = "http://www.uoforever.com/patches/UOPTREEHACK/Updates.xml";
     }
 }
