@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight.Threading;
 using UOFLauncher.Classes;
 using UOFLauncher.Models;
@@ -56,7 +60,6 @@ namespace UOFLauncher
 
             if (Ultima.IsInstalled())
                 Updates.InitializeUpdates();
-             
         }
 
         private void CreateMutex(StartupEventArgs e)
