@@ -42,7 +42,10 @@
             <Border Grid.Row="0" Background="#1F1F1F" />
             <Border Grid.Row="2" Background="#202020" />
 
-
+            <Image Grid.Row="0" Margin="0,18,20,0" Visibility="{Binding ShowUpdatesAvailable}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="211"
+               Height="46" Source="../Resources/UPDATE.png" />
+            <TextBlock Height="20" HorizontalAlignment ="Right" Visibility="{Binding ShowDownloads}" VerticalAlignment ="Top" Margin="0 0 120 0" Width="100" Background="#1F1F1F" Text="Downloading:" Foreground="#FFA49E9E" FontStyle="Italic"/>
+            <TextBlock Height="20" HorizontalAlignment ="Right" Visibility="{Binding ShowDownloads}" TextAlignment ="Right" VerticalAlignment ="Top" Margin="0 40 26 0" Width="195" Background="#1F1F1F" Text="{Binding ProgressString}" Foreground="#FFA49E9E" FontStyle="Italic"/>
             <ProgressBar Margin="0 0 25 0" Visibility="{Binding ShowDownloads}" Grid.Row="0"
                          HorizontalAlignment="Right" Height="21" VerticalAlignment="Center" Width="200" Minimum="0"
                          Value="{Binding DownloadProgress}" Style="{DynamicResource ProgressBarStyle}" />
