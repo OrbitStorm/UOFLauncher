@@ -20,7 +20,9 @@ namespace UOFLauncher.ViewModels
         private ICommand _onCloseCommand;
         private ICommand _onLoadCommand;
         private string _showDownloads;
+        private string _showUpdatesAvailable;
         private string _toastMessage;
+        private string _progressString;
 
         public Main_ViewModel()
         {
@@ -31,13 +33,22 @@ namespace UOFLauncher.ViewModels
 
             Messenger.Default.Register<ProgressObject>(this, obj =>
             {
+                if (ShowDownloads == "Collapsed")
+                {
+                    ShowDownloads = "Visible";
+                    ShowUpdatesAvailable = "Collapsed";
+                }
+
                 _maxDownload += obj.TotalDownload;
                 _currentlyDownloaded += obj.Downloaded;
 
                 DownloadProgress = (int)Math.Round(((double)_currentlyDownloaded / _maxDownload) * 100);
+
+                DisplayProgressString();
             });
 
             ShowDownloads = "Collapsed";
+            ShowUpdatesAvailable = "Collapsed";
         }
 
         public string ToastMessage
@@ -70,6 +81,26 @@ namespace UOFLauncher.ViewModels
             }
         }
 
+        public string ShowUpdatesAvailable
+        {
+            get { return _showUpdatesAvailable; }
+            set
+            {
+                _showUpdatesAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ProgressString
+        {
+            get { return _progressString; }
+            set
+            {
+                _progressString = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICommand OnCloseCommand
         {
             get { return _onCloseCommand ?? (_onCloseCommand = new RelayCommand<CancelEventArgs>(Execute_Close)); }
@@ -84,12 +115,12 @@ namespace UOFLauncher.ViewModels
             }
         }
 
-        public void ReceiveMessage(ObservableCollection<BaseUpdateObject> collection)
+        public void DisplayProgressString()
         {
-            if (collection.Count > 0 && ShowDownloads == "Collapsed")
-            {
-                ShowDownloads = "Visible";
-            }
+            decimal downloadedMB = Math.Round((decimal)_currentlyDownloaded / 1000000, 2);
+            decimal toDownloadMB = Math.Round((decimal)_maxDownload / 1000000, 2);
+
+            ProgressString = String.Format("{0}/{1} MB", downloadedMB, toDownloadMB);
         }
 
         private void Execute_Close(CancelEventArgs e)
@@ -127,7 +158,8 @@ namespace UOFLauncher.ViewModels
 
         private void Event_UpdatesRetrieved()
         {
-            ShowDownloads = "Visible"; 
+            if (Updates.Instance.UpdatesCollection.Count > 0)
+                ShowUpdatesAvailable = "Visible"; 
         }
 
         private void Event_DownloadsCompleted()
@@ -136,8 +168,11 @@ namespace UOFLauncher.ViewModels
             _currentlyDownloaded = 0;
             _downloadProgress = 0;
 
-            if (Updates.Instance.UpdatesCollection.Count == 0)
-                ShowDownloads = "Collapsed";           
+            if (Updates.Instance.UpdatesCollection.FirstOrDefault(x => x.Status == AssemblyStatus.Downloading) == null)
+                ShowDownloads = "Collapsed";
+
+            if (Updates.Instance.UpdatesCollection.Count > 0)
+                ShowUpdatesAvailable = "Visible";
         }
     }
 }
